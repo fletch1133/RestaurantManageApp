@@ -12,9 +12,18 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    <x-responsive-nav-links :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }} 
+                    </x-responsive-nav-links>
+
+                    <x-responsive-nav-links :href="route('cashier')" :active="request()->routeIs('cashier')">
+                        {{ __('Cashier') }}
+                    </x-responsive-nav-links>
+
+                    <x-responsive-nav-links :href="route('report')" :active="request()->routeIs('report')">
+                        {{ __('Report') }}
+                    </x-responsive-nav-links> 
+
                 </div>
             </div>
 
@@ -70,6 +79,14 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            <x-responsive-nav-links :href="route(('cashier')" :active="request()->routeIs('cashier')">
+                {{ __('Cashier') }}
+            </x-responsive-nav-links>
+
+            <x-responsive-nav-links :href="route(('report')" :active="request()->routeIs('report')"> 
+                {{ __('Report') }}
+            </x-responsive-nav-links>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -81,7 +98,7 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('Profile') }} 
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
