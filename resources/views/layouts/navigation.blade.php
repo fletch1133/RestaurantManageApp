@@ -15,15 +15,6 @@
                     <x-responsive-nav-links :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }} 
                     </x-responsive-nav-links>
-
-                    <x-responsive-nav-links :href="route('cashier')" :active="request()->routeIs('cashier')">
-                        {{ __('Cashier') }}
-                    </x-responsive-nav-links>
-
-                    <x-responsive-nav-links :href="route('report')" :active="request()->routeIs('report')">
-                        {{ __('Report') }}
-                    </x-responsive-nav-links> 
-
                 </div>
             </div>
 
@@ -79,14 +70,6 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-
-            <x-responsive-nav-links :href="route(('cashier')" :active="request()->routeIs('cashier')">
-                {{ __('Cashier') }}
-            </x-responsive-nav-links>
-
-            <x-responsive-nav-links :href="route(('report')" :active="request()->routeIs('report')"> 
-                {{ __('Report') }}
-            </x-responsive-nav-links>
         </div>
 
         <!-- Responsive Settings Options -->

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+}); 
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -30,9 +30,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //Add Data Manage, Cashier and Report
-    Route::get('/cashier', [CashierController::class, 'index'])->name('cashier');
-    Route::get('/report', [ReportController::class, 'index'])->name('report');
-    
+    Route::get('/management', function() { 
+        return view('management.index', ['slot' => '']);
+    }); 
+
+    Route::resource('management/category', 'App\Http\Controllers\Management\CategoryController');  
+
+    Route::get('/cashier', function () {
+        return view('cashier.index', ['slot' => '']);
+    });
+
+    Route::get('/report', function() {
+        return view('report.index', ['slot' => '']); 
+    });
+
 });
 
 require __DIR__.'/auth.php';

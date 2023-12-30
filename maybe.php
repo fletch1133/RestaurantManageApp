@@ -183,4 +183,95 @@
 
 "dependencies": {
         "@fortawesome/fontawesome-free": "^6.5.1"
-    }
+    } 
+
+
+
+
+
+
+    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+            @include('layouts.navigation') 
+
+
+
+
+
+
+            <x-responsive-nav-links :href="route('cashier')" :active="request()->routeIs('cashier')">
+                        {{ __('Cashier') }}
+                    </x-responsive-nav-links>
+
+                    <x-responsive-nav-links :href="route('report')" :active="request()->routeIs('report')">
+                        {{ __('Report') }}
+                    </x-responsive-nav-links> 
+
+
+
+
+
+
+
+
+                    <x-responsive-nav-links :href="route(('cashier')" :active="request()->routeIs('cashier')">
+                {{ __('Cashier') }}
+            </x-responsive-nav-links>
+
+            <x-responsive-nav-links :href="route(('report')" :active="request()->routeIs('report')"> 
+                {{ __('Report') }}
+            </x-responsive-nav-links>
+
+
+
+
+
+
+
+
+
+            @extend('layouts.app')  
+
+@section('content')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action">Category</a>
+                    <a class="list-group-item list-group-item-action">Menu</a>
+                    <a class="list-group-item list-group-item-action">Table</a>
+                    <a class="list-group-item list-group-item-action">User</a>
+                </div>
+            </div>
+            <div class="col-md-8"></div>  
+        </div>
+    </div>
+@endsection
+
+<h1>This is the management page</h1>     
+
+
+
+
+
+@extends('layouts.app')
+
+@section('content')
+    @include('components.nav-link')
+
+
+<div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="list-group">
+                    <x-nav-link href="#" :active="true">Category</x-nav-link>
+                    <x-nav-link href="#">Menu</x-nav-link>
+                    <x-nav-link href="#">Table</x-nav-link>
+                    <x-nav-link href="#">User</x-nav-link>
+                </div>
+            </div>
+            <div class="col-md-8"></div>  
+        </div>
+</div>
+
+<h1>This is the management page</h1>  
+@endsection
