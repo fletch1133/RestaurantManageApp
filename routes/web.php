@@ -35,14 +35,18 @@ Route::middleware('auth')->group(function () {
     }); 
 
     Route::resource('management/category', 'App\Http\Controllers\Management\CategoryController');  
+    Route::resource('management/menu', 'App\Http\Controllers\Management\MenuController'); 
 
     Route::get('/cashier', function () {
         return view('cashier.index', ['slot' => '']);
     });
 
-    Route::get('/report', function() {
+    Route::get('/report', function() { 
         return view('report.index', ['slot' => '']); 
     });
+
+    Route::delete('/management/category/{id}', 'App\Http\Controllers\Management\CategoryController@destroy');
+    //Route for the delete button to function
 
 });
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Management;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -12,7 +13,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('management.category', ['slot' => '']);   
+        $categories = Category::paginate(5);
+        return view('management.category', ['slot' => ''])->with('categories', $categories);
     } 
 
     /**
@@ -20,16 +22,25 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('management.createCategory');
-    }
+        return view('management.createCategory', ['slot' => '']);
+    } 
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request)  
     {
-        //
-    }
+        $request->validate([
+            'name' => 'required|unique:categories|max:255'
+        ]);
+        $category = new Category;
+        $category->name = $request->input('name');  
+        $category->save();
+        $request->session()->flash('status', $request->name. " is saved successfully"); 
+
+        //Redirect to initial category page
+        return(redirect('/management/category')); 
+    } 
 
     /**
      * Display the specified resource.
@@ -44,7 +55,8 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $category = Category::find($id);
+        return view('management.editCategory', ['slot' => ''])->with('category', $category);
     }
 
     /**
@@ -52,7 +64,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:categories|max:255'
+        ]);
+        $category = Category::find($id); 
+        $category->name = $request->name;
+        $category->save();
+        $request->session()->flash('status', $request->name. " is updated successfully"); 
+
+        //Redirect to initial category page
+        return(redirect('/management/category')); 
     }
 
     /**
@@ -60,6 +81,8 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
-    }
-}
+        Category::destroy($id);
+        Session()->flash('status', 'The category has been deleted successfully');
+        return redirect('/management/category');
+    } 
+} 

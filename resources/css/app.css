@@ -6,21 +6,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 5vh;
+    height: 5vh; 
 }
 
 .center-content {
-    text-align: center;
+    text-align: center; 
     padding: 20px;
     border-radius: 8px;
-}
+} 
 
 body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
+    background-color: #f4f4f4; 
 }
 
 .container {
@@ -69,7 +69,7 @@ body {
 .management {
     background-color: #3d71e1;
     color: #fff;
-}
+} 
 
 /*Style for Cashier Link */
 .cashier {
@@ -78,41 +78,193 @@ body {
 }
 
 /*Style for Report Link */
-.report {
+.report { 
     background-color: #e74c3c;
     color: #fff;
-}
+} 
 
 
 /*Style for Management Page */
-.list-group {
+    .container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start; 
+        flex-direction: column;
+        margin-left: 20px;
+        margin-top: 80px; 
+    } 
+    
+    .list-group {
+        width: 100%;
+        max-width: 150px; 
+    }
+    
+    .list-group-item {
+        cursor: pointer;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        padding: 12px;
+        width: 100%;
+        text-align: left;
+        transition: background-color 0.3s ease; 
+        display: flex;
+        align-items: center; 
+    }
+    
+    .list-group-item i {
+        margin-right: 10px; 
+    }
+    
+    .list-group-item:hover {
+        background-color: #e6e6e6; 
+    }
+    
+    .list-group-item.list-group-item-action.active {
+        background-color: #4d94ff;
+        color: #fff;
+    }
+
+    .btn-create-category {
+        margin-bottom: 20px; 
+        margin-left: auto;
+        float: right;
+        clear: both;
+        background-color: #28a745;
+        color: #fff;
+        border: 1px solid #218838;
+        padding: 8px 16px;
+    }  
+    
+    h1 {
+        margin-top: 20px;
+        text-align: center;
+    } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Style for Edit, Delete Columns */
+.table-container {
     display: flex;
-    flex-direction: column; 
-    align-items: center;
-    width: 100%;
+    justify-content: center;
 }
 
-.list-group-item {
+.table {
+    width: 100%;
+    margin-bottom: irem;
+    color: #212529;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+    background-color: #f8f9fa;
+}
+
+.table tbody + tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
     cursor: pointer;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 4px 0;
-    padding: 10px;
-    width: 100%;
-    text-align: center;
-    transition: background-color 0.3s ease; 
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.list-group-item:hover {
-    background-color: #f0f0f0; 
-}
-
-.list-group-item.list-group-item-action.active {
-    background-color: #007bff;
+.btn-warning {
     color: #fff;
+    background-color: #ffc107;
+    border-color: #ffc107;
 }
 
-h1 {
-    margin-top: 20px;
-    text-align: center;
-}  
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+
+
+
+
+
+
+
+/*Style for Create Menu Page */
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+form label {
+    font-weight: bold;
+}
+
+form .form-control {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+form .input-group {
+    width: 100%;
+}
+
+form .custom-file {
+    width: 100%;
+}
+
+form .custom-file-label {
+    text-align: left;
+}
+
+form .btn-primary {
+    margin-top: 15px;
+}
+
+
+/*Styling to center all of the pages*/
+.custom-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.col-md-8 {
+    margin-left: 300px;
+}
+

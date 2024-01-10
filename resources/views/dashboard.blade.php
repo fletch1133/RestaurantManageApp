@@ -21,8 +21,8 @@
                         </div> 
                     </div>
                 </div> 
-            </div>
-        </div>
+            </div> 
+        </div> 
 
             <div class="container">
             <div class="row text-center"> 
@@ -31,7 +31,7 @@
                     <h4>
                     <i class="fa-solid fa-database"></i> Management
                     </h4>
-                    <img width="50px" src="{{asset('images/management.svg')}}"/>
+                    <img width="50px"/>
                     </a>
                 </div> 
 
@@ -40,7 +40,7 @@
                     <h4> 
                     <i class="fa-solid fa-money-bill-transfer"></i> Cashier
                     </h4>
-                    <img width="50px" src="{{asset('images/cashier.svg')}}"/>
+                    <img width="50px"/>
                     </a>
                 </div>
 
@@ -49,7 +49,7 @@
                     <h4>
                     <i class="fas fa-list-check"></i> Report
                     </h4>
-                    <img width="50px" src="{{asset('report/management.svg')}}"/>
+                    <img width="50px"/>
                     </a>
                 </div>
 
@@ -70,9 +70,9 @@
         }
     };
 
-        hideLoggedInMessage();
+        hideLoggedInMessage(); 
     });
 
     </script>
     </x-slot>
-</x-app-layout> 
+</x-app-layout>

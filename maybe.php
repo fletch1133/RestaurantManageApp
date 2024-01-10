@@ -275,3 +275,19 @@
 
 <h1>This is the management page</h1>  
 @endsection
+
+
+
+
+
+
+.btn-create-category {
+        margin-bottom: 20px; 
+        margin-left: auto;
+        float: right;
+        clear: both;
+        background-color: #28a745;
+        color: #fff;
+        border: 1px solid #218838;
+        padding: 8px 16px;
+    }  
