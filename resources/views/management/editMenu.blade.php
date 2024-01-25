@@ -7,34 +7,33 @@
         <div class="row justify-content-center">
             @include('management.inc.sidebar')
             <div class="col-md-8"> 
-                 <i class="fa-solid fa-table-columns"></i> Create a Menu
+                 <i class="fa-solid fa-table-columns"></i> Edit a Menu
                  <hr>
+                 @if ($menu) 
                  @if($errors->any())
                  <div class="alert alert-danger">
                     <ul>
-                        @foreach($errors->all() as $error)
+                        @foreach($errors->all() as $error) 
                             <li>{{$error}}</li> 
                         @endforeach
                     </ul>
-                </div>
+                </div> 
                 @endif
                 <!--Check if there are any validation errors, if so creates alert box with danger style, lists VE in unordered list and displays each error message in seperate list-->
 
-                 <form action="/management/menu" method="POST" enctype="multipart/form-data">  <!--Pass to MenuController, public func store-->
+                 <form action="{{ url('/management/menu/') . $menu->id }}" method="POST" enctype="multipart/form-data">  <!--Pass to MenuController, public func store-->
                     @csrf 
+                    @method('PUT') 
                     <div class="form-group">
                         <label form="menuName">Menu Name</label> 
-                        <input type="text" name="name" class="form-control" placeholder="Menu...">
+                        <input type="text" name="name" value="{{$menu->name}}" class="form-control" placeholder="Menu...">
                     </div>
                     <label for="menuPrice">Price</label>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text">$</span>
                         </div>
-                        <input type="text" name="price" class="form-control" aria-label="Amount (to the nearest dollar)">
-                        <div class="input-group-append">
-                            <span class="input-group-text">.00</span> 
-                        </div>
+                        <input type="text" name="price" value="{{$menu->price}}" class="form-control" aria-label="Amount (to the nearest dollar)">
                     </div>
                     <label for="MenuImage">Image</label>
                     <div class="input-group mb-3">
@@ -49,25 +48,26 @@
 
                     <div class="form-group">
                         <label for="Description">Description</label> 
-                        <input type="text" name="description" class="form-control" placeholder="Description..."> 
+                        <input type="text" name="description" value="{{$menu->description}}" class="form-control" placeholder="Description..."> 
                     </div>
 
                     <div class="form-group">
                         <label for="Category">Category</label>
                         <select class="form-control" name="category_id">
                             @foreach ($categories as $category)
-                                <option value="{{$category->id}}">{{$category->name}}</option> 
+                                <option value="{{$category->id}}" {{$menu->category_id === $category->id ? 'selected': ''}}>{{$category->name}}</option> 
                             
-                            @endforeach
+                            @endforeach 
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save</button> 
+                    <button type="submit" class="btn btn-warning">Edit</button> 
                  </form>
-                 <!--Creates new category, includes text input for category name, CSRF token for security, submit button, when submitted
-                 sends POST request to route--> 
+                  @else
+                  <p>Menu not found</p> 
+                  @endif
             </div>  
         </div> 
     </div>
 
-<h1>This is the create a menu page</h1> 
+<h1>This is the edit menu page</h1> 

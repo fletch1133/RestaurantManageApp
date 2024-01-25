@@ -36,17 +36,26 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('management/category', 'App\Http\Controllers\Management\CategoryController');  
     Route::resource('management/menu', 'App\Http\Controllers\Management\MenuController'); 
+    Route::resource('management/table', 'App\Http\Controllers\Management\TableController'); 
 
-    Route::get('/cashier', function () {
-        return view('cashier.index', ['slot' => '']);
-    });
+    Route::delete('/management/category/{id}', 'App\Http\Controllers\Management\CategoryController@destroy');
+    //Route for the delete button to function
+
+
+    Route::get('/cashier', 'App\Http\Controllers\Cashier\CashierController@index'); 
+
+    Route::get('/cashier/getMenuByCategory/{category_id}', 'App\Http\Controllers\Cashier\CashierController@getMenuByCategory'); 
+
+    Route::get('/cashier/getTable', 'App\Http\Controllers\Cashier\CashierController@getTables');
+
+    Route::post('/cashier/orderFood', 'App\Http\Controllers\Cashier\CashierController@orderFood');
+
 
     Route::get('/report', function() { 
         return view('report.index', ['slot' => '']); 
     });
 
-    Route::delete('/management/category/{id}', 'App\Http\Controllers\Management\CategoryController@destroy');
-    //Route for the delete button to function
+    
 
 });
 

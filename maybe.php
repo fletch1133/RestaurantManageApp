@@ -278,16 +278,207 @@
 
 
 
+<?php
+
+//Validate if a user upload image
+        if($request->image){
+            $request->validate([
+                'image' => 'nullable|file|image|mimes:jpeg,png,jpg|max:5000'
+            ]);
+            if($menu->image != "noimage.png"){ 
+                $imageName = $menu->image;
+                unlink(public_path('menu_images').'/'. $imageName);
+            }
+            $imageName = date('mdYHis').uniqid().'.'.$request->image->extension();
+            $request->image->move(public_path('menu_images'), $imageName); 
+        } else {
+            $imageName = $menu->image;
+        }
+
+        $menu->name = $request->name;
+        $menu->price = $request->price;
+        $menu->image = $imageName;
+        $menu->description = $request->description;
+        $menu->category_id = $request->category_id;
+        $menu->save();
+        $request->session()->flash('status', $request->name. ' is updated successfully');
+        return redirect('/management/menu');
+        ?>
+
+
+        @extends('layouts.app')
+
+        @section('content')
+        <div class="container">
+            <div class="row justify-content-center">
+                <h1>Cashier page</h1>
+            </div>
+        </div>
+        @endsection
 
 
 
-.btn-create-category {
-        margin-bottom: 20px; 
-        margin-left: auto;
-        float: right;
-        clear: both;
-        background-color: #28a745;
-        color: #fff;
-        border: 1px solid #218838;
-        padding: 8px 16px;
-    }  
+        btn btn-primary btn-block" id="btn-show-ta
+
+
+        
+        
+        $(document).ready(function() {
+        $("#btn-show-tables").click(function() {
+            if ($("#table-detail").is(":hidden")) {
+                $.get("/cashier/getTable", function(data) {
+                    $("#table-detail").html(data);
+                    $("#table-detail").slideDown('fast');
+                    $("#btn-show-tables").html('Hide Tables').removeClass('styled-button').addClass('btn-danger');
+        });
+    } else {
+        $("#table-detail").slideUp('fast');
+        $("#btn-show-tables").html('View All Tables').removeClass('btn-danger').addClass('styled-button');
+    }
+    });
+}); 
+
+
+
+<?php
+ Route::get('/cashier', function () {
+    return view('cashier.index', ['slot' => '']);
+});
+
+
+Route::get('/cashier', ['slot' => ''], 'App\Http\Controllers\Cashier\CashierController@index');
+
+
+
+
+return view('cashier.index')->with('categories', $categories);
+
+
+
+
+//app.blade.php
+@include('components.nav-link') 
+
+?>
+
+@extends('layouts.app') 
+
+@section('content') 
+    @include('components.nav-link')
+
+<div class="container">
+    <div class="row" id="table-detail"></div>
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <button class="styled-button" id="btn-show-tables">View All Tables</button> 
+        </div>
+        <div class="col-md-7">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    @foreach($categories as $category)
+                    <a class="nav-item nav-link" data-toggle="tab">
+                        {{ $category->name }} 
+                    </a> 
+                    @endforeach 
+                </div>
+            </nav> 
+        </div> 
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    //Make table-detail hidden by default
+    $("#table-detail").hide();
+
+    //Show all tables when client clicks on button
+    $(document).ready(function() {
+        $("#btn-show-tables").click(function() {
+            if ($("#table-detail").is(":hidden")) {
+                $.get("/cashier/getTable", function(data) {
+                    $("#table-detail").html(data);
+                    $("#table-detail").slideDown('fast');
+                    $("#btn-show-tables").html('Hide Tables').removeClass('styled-button').addClass('btn-danger');
+        });
+    } else {
+        $("#table-detail").slideUp('fast');
+        $("#btn-show-tables").html('View All Tables').removeClass('btn-danger').addClass('styled-button');
+    }
+    });
+}); 
+
+</script>
+@endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@extends('layouts.app')
+
+@section('content')
+    @include('components.nav-link')
+
+    <div class="container">
+        <div class="row" id="table-detail"></div>
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <button class="styled-button" id="btn-show-tables">View All Tables</button>
+            </div>
+            <div class="col-md-7"> 
+                <!-- Bootstrap tabs for each category -->
+                <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+                    @foreach($categories as $key => $category)
+                        <li class="nav-item" role="presentation">
+                            <!-- Active class for the first tab -->
+                            <a class="nav-link {{ $key === 0 ? 'active' : '' }}" id="tab-{{ $key }}" data-toggle="tab" href="#{{ $category->name }}" role="tab" aria-controls="{{ $category->name }}" aria-selected="true">
+                                {{ $category->name }}
+                            </a>
+                        </li>
+                    @endforeach 
+                </ul>
+
+                <!-- Tab content -->
+                <div class="tab-content" id="nav-tabContent">
+                    @foreach($categories as $key => $category)
+                        <div class="tab-pane fade {{ $key === 0 ? 'show active' : '' }}" id="{{ $category->name }}" role="tabpanel" aria-labelledby="tab-{{ $key }}">
+                            <!-- Content for each category goes here -->
+                            <!-- For example, you can display items related to this category -->
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        // Make table-detail hidden by default
+        $("#table-detail").hide();
+
+        // Show all tables when the client clicks on the button
+        $(document).ready(function() {
+            $("#btn-show-tables").click(function() {
+                if ($("#table-detail").is(":hidden")) {
+                    $.get("/cashier/getTable", function(data) {
+                        $("#table-detail").html(data);
+                        $("#table-detail").slideDown('fast');
+                        $("#btn-show-tables").html('Hide Tables').removeClass('styled-button').addClass('btn-danger');
+                    });
+                } else {
+                    $("#table-detail").slideUp('fast');
+                    $("#btn-show-tables").html('View All Tables').removeClass('btn-danger').addClass('styled-button');
+                }
+            });
+        });
+    </script>
+@endsection

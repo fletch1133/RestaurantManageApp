@@ -268,3 +268,24 @@ form .btn-primary {
     margin-left: 300px;
 }
 
+
+/*Styling for View All Tables btn in cashier/index.blade.php */
+.styled-button {
+    color: white;
+    background-color: blue;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; 
+}
+
+
+/*Styling for Hide Tables btn in cashier/index.blade.php */
+#btn-hide-tables {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+#btn-hide-tables:hover {
+    background-color: #bd2130;
+} 
