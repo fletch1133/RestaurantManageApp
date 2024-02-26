@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    //Add Data Manage, Cashier and Report
+    //Routes for management
     Route::get('/management', function() { 
         return view('management.index', ['slot' => '']);
     }); 
@@ -42,20 +42,31 @@ Route::middleware('auth')->group(function () {
     //Route for the delete button to function
 
 
+    //Routes for cashier
     Route::get('/cashier', 'App\Http\Controllers\Cashier\CashierController@index'); 
 
     Route::get('/cashier/getMenuByCategory/{category_id}', 'App\Http\Controllers\Cashier\CashierController@getMenuByCategory'); 
 
     Route::get('/cashier/getTable', 'App\Http\Controllers\Cashier\CashierController@getTables');
 
+    Route::get('/cashier/getSaleDetailsByTable/{table_id}', 'App\Http\Controllers\Cashier\CashierController@getSaleDetailsByTable');
+
     Route::post('/cashier/orderFood', 'App\Http\Controllers\Cashier\CashierController@orderFood');
 
+    Route::post('/cashier/deleteSaleDetail', 'App\Http\Controllers\Cashier\CashierController@deleteSaleDetail');
 
-    Route::get('/report', function() { 
-        return view('report.index', ['slot' => '']); 
-    });
+    Route::post('/cashier/confirmOrderStatus', 'App\Http\Controllers\Cashier\CashierController@confirmOrderStatus'); 
 
-    
+    Route::post('/cashier/savePayment', 'App\Http\Controllers\Cashier\CashierController@savePayment'); 
+
+    Route::get('/cashier/showReceipt/{saleID}', 'App\Http\Controllers\Cashier\CashierController@showReceipt');
+
+
+    //Routes for report
+    Route::get('/report', 'App\Http\Controllers\Report\ReportController@index'); 
+
+    Route::get('/report/show', 'App\Http\Controllers\Report\ReportController@show'); 
+
 
 });
 

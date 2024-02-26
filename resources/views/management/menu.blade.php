@@ -42,7 +42,7 @@
                                 width="120px" height="120px" class="img-thumbnail"> <!--Might need to update based on Img???-->
                             </td>
                             <td>{{$menu->description}}</td>
-                            <td>{{$menu->category->name}}</td> 
+                            <td>{{ optional($menu->category)->name }}</td>
                             <td><a href="/management/menu/{{$menu->id}}/edit" class="btn btn-warning">Edit</a></td> <!--Sends to edit func in menu controller-->
                             <td>
                                 <form action="/management/menu/{{$menu->id}}" method="post">

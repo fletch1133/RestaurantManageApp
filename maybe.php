@@ -482,3 +482,366 @@ return view('cashier.index')->with('categories', $categories);
         });
     </script>
 @endsection
+
+
+
+
+
+<?php
+
+public function orderFood(Request $request) {
+        $menu = Menu::find($request->menu_id); 
+        
+
+        $table_id = $request->table_id;
+        $table_name = $request->table_name;
+        $sale = Sale::where('table_id', $table_id)->where('sale_status', 'unpaid')->first();
+        //If there is no sale for the selected table, create a new sale record
+        if(!$sale){
+            $user = Auth::user();
+            $sale = new Sale();
+            $sale->table_id = $table_id;
+            $sale->table_name = $table_name;
+            $sale->user_id = $user->id;
+            $sale->user_name = $user->name;
+            $sale->save();
+            $sale_id = $sale->id;
+            
+            //Update table status
+            $table = Table::find($table_id);
+            $table->status = "unavailable";
+            $table->save();
+        } else { //If there is a sale on the selected table
+            $sale_id = $sale->id;
+        }
+        //Add ordered menu to sale_details table
+        $saleDetail = new SaleDetail();
+        $saleDetail->sale_id = $sale_id;
+        $saleDetail->menu_id = $menu->id;
+        $saleDetail->menu_name = $menu->name;
+        $saleDetail->menu_price = $menu->price; 
+        $saleDetail->quantity = $request->quantity;
+        $saleDetail->save();
+        
+        // Update total price in sales table
+        $sale->total_price = $sale->total_price + ($request->quantity * $menu->price);
+        $sale->save();
+
+        return $sale->total_price; //Testing
+    }
+
+
+
+
+
+
+
+
+    <td>{{$menu->category->name}}</td> 
+
+
+
+
+
+
+
+
+
+    public function orderFood(Request $request) {
+        $menu = Menu::find($request->menu_id);         
+
+        $table_id = $request->table_id;
+        $table_name = $request->table_name;
+        $sale = Sale::where('table_id', $table_id)->where('sale_status', 'unpaid')->first();
+        //If there is no sale for the selected table, create a new sale record
+        if(!$sale){
+            $user = Auth::user();
+        
+            $sale = new Sale();
+
+            $sale->table_id = $table_id;
+            $sale->table_name = $table_name;
+            $sale->user_id = $user->id;
+            $sale->user_name = $user->name;
+            $sale->save();
+            $sale_id = $sale->id;
+            
+            //Update table status
+            $table = Table::find($table_id);
+            $table->status = "unavailable";
+            $table->save();
+        } else { //If there is a sale on the selected table
+            $sale_id = $sale->id;
+        }
+        //Add ordered menu to sale_details table
+        $saleDetail = new SaleDetail();
+        $saleDetail->sale_id = $sale_id;
+        $saleDetail->menu_id = $menu->id;
+        $saleDetail->menu_name = $menu->name;
+        $saleDetail->menu_price = $menu->price; 
+        $saleDetail->quantity = $request->quantity;
+        $saleDetail->save();
+        
+        // Update total price in sales table
+        $sale->total_price = $sale->total_price + ($request->quantity * $menu->price);
+        $sale->save();
+
+        return $sale->total_price; //Testing
+    } 
+
+
+
+
+
+    public function orderFood(Request $request) {
+        try {
+            $menu = Menu::find($request->menu_id);         
+    
+            $table_id = $request->table_id;
+            $table_name = $request->table_name;
+            $sale = Sale::where('table_id', $table_id)->where('sale_status', 'unpaid')->first();
+    
+            // Log information for debugging
+            Log::info('Menu ID: ' . $menu->id);
+            Log::info('Table ID: ' . $table_id);
+            Log::info('Table Name: ' . $table_name);
+            Log::info('Existing Sale: ' . json_encode($sale));
+    
+            // Rest of your existing code...
+    
+            return $sale->total_price; //Testing
+        } catch (\Exception $e) {
+            // Log any exceptions that may occur
+            Log::error('Error in orderFood: ' . $e->getMessage());
+            Log::error('Trace: ' . $e->getTraceAsString());
+    
+            // Handle the exception as needed, you might want to return an error response
+            return response()->json(['error' => 'An error occurred. Please try again.'], 500);
+        }
+    }
+
+
+
+    private function getSaleDetails($sale_id) {
+        
+        //List all sales details
+        $html = '<p>Sale ID: '.$sale_id.'</p>';
+        $saleDetails = SaleDetail::where('sale_id', $sale_id)->get();
+        $html .= '<div class="table-responsive-md" style="overflow-y:scroll; 
+        height: 400px; border: 1px solid #343A40"> 
+        <table class="table table-stripped table-dark">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Menu</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Total</th> 
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>';
+
+        $showBtnPayment = true;
+        foreach($saleDetails as $saleDetail){ 
+            $html .= ' 
+            <tr>
+                <td>'.$saleDetail->menu_id.'</td>
+                <td>'.$saleDetail->menu_name.'</td>
+                <td>'.$saleDetail->quantity.'</td>
+                <td>'.$saleDetail->menu_price.'</td>
+                <td>'.($saleDetail->menu_price * $saleDetail->quantity).'</td>';
+                if($saleDetail->status == "noConfirm"){
+                    $showBtnPayment = false;
+                    $html .= '<td> <a data-id="'.$saleDetail->id.'" class="btn btn-danger btn-delete-saledetail"><i class="fa-solid fa-trash"></i></a> </td>';
+                } else{ //status == "confirm"
+                    $html .= '<td> <i class="fa-solid fa-check"></i> </td>';
+                }
+            $html .= '</tr>';
+        }
+
+        $html .='</tbody></table></div>';
+
+        $sale = Sale::find($sale_id);
+        $html .= '<hr>';
+        $html .= '<h3>Total Amount: $'.number_format($sale->total_price).'</h3>';
+
+        if($showBtnPayment){
+            $html .= '<button data-id="'.$sale_id.'" class="btn btn-success btn-block btn-payment" data-bs-toggle="modal" data-bs-target="#exampleModal">Payment</button>';
+        }else {
+            $html .= '<button data-id="'.$sale_id.'" class="btn btn-warning btn-block btn-confirm-order">Confirm Order</button>';
+        } 
+
+        return $html;
+
+    }
+
+
+
+
+
+
+    public function savePayment(Request $request) {
+        $saleID = $request->saleID;
+        $receivedAmount = $request->receivedAmount;
+        $paymentType = $request->paymentType;
+
+        //Update sale info in sales table by using sale model
+        $sale = Sale::find($saleID);
+        $sale->total_received = $receivedAmount;
+        $sale->change = $receivedAmount - $sale->total_price;
+        $sale->payment_type = $paymentType;
+        $sale->sale_status = "paid";
+        $sale->save();
+
+        //Update table to be available
+        $table = Table::find($sale->table_id);
+        $table->status = "available";
+        $table->save();
+        return "/cashier";
+    }
+
+
+
+
+    <!-- Styles --> 
+    <link href="{{ asset('resources/css/app.css') }}" rel="stylesheet"> 
+    <link href="{{ asset('resources/css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('resources/css/receipt.css') }}" rel="stylesheet">
+
+
+
+    Route::get('/report', function() { 
+        return view('report.index', ['slot' => '']); 
+    });
+
+
+
+    <!---->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+
+
+    <!-- Include jQuery -->
+    <script src="/resources/js/jquery-3.6.4.min.js"></script>
+
+    <!-- Include jQuery -->
+        <script src="{{ asset('resources/js/jquery-3.6.4.min.js') }}"></script> 
+
+
+        @extends('layouts.app')  
+
+@section('content')
+@include('components.nav-link')
+
+
+    <div class="container">
+        <div class="row"> 
+            <div class="col-md-12">
+                 @if($errors->any())
+                 <div class="alert alert-danger">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{$error}}</li> 
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/home">Main Functions</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" >Report</li> 
+                    </ol>
+                </nav>
+            </div>  
+        </div> 
+        <div class="row">
+            <form action="/report/show" method="GET">
+                <div class="col-md-12">
+                    <label>Choose Date For Report</label> 
+            <div class="form-group">
+                    <div class="input-group date" id="date-start" data-target-input="nearest">
+                    <input type="text" name="dateStart" class="form-control datetimepicker-input" data-target="#date-start"/>
+                    <div class="input-group-append" data-target="#date-start" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+           <div class="input-group date" id="date-end" data-target-input="nearest">
+                <input type="text" name="dateEnd" class="form-control datetimepicker-input" data-target="#date-end"/>
+                <div class="input-group-append" data-target="#date-end" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Show Report">
+        </form>
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+    $(function () { 
+        $('#date-start').datetimepicker({
+            format : 'L'
+        });
+        $('#date-end').datetimepicker({
+            format : 'L',
+            useCurrent: false 
+        });
+        $("#date-start").on("change.datetimepicker", function (e) {
+            $('#date-end').datetimepicker('minDate', e.date);
+        });
+        $("#date-end").on("change.datetimepicker", function (e) {
+            $('#date-start').datetimepicker('maxDate', e.date);
+        });
+    }); 
+</script> 
+
+
+<h1>This is the report page</h1>
+
+
+
+
+$(function () {
+    $('#date-start').datetimepicker({
+        format: 'L'
+    });
+    $('#date-end').datetimepicker({
+        format: 'L',
+        useCurrent: false
+    });
+    $("#date-start").on("change.datetimepicker", function (e) {
+        $('#date-end').datetimepicker('minDate', e.date);
+    });
+    $("#date-end").on("change.datetimepicker", function (e) {
+        $('#date-start').datetimepicker('maxDate', e.date);
+    });
+});
+
+
+
+
+public function show(Request $request) {
+    $request->validated([
+        'dateStart' => 'required',
+        'dateEnd' => 'end'
+    ]);
+
+
+
+    public function show(Request $request) {
+        //Validate reuqest data
+        $validator = Validator::make($request->all(), [
+            'dateStart' => 'required',
+            'dateEnd' => 'required|required_end' 
+        ]);
+
+//If validation fails, redirect back with errors
+if ($validator->fails()) {
+    return redirect()->back()->withErrors($validator)->withInput();
+}

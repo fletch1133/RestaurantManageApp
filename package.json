@@ -22,6 +22,10 @@
         "vue": "^3.2.37"
     },
     "dependencies": {
-        "tailwind": "^4.0.0"
+        "@eonasdan/tempus-dominus": "^6.9.5",
+        "jquery": "^3.7.1",
+        "moment": "^2.30.1",
+        "tailwind": "^4.0.0",
+        "tempusdominus-bootstrap-4": "^5.39.2"
     }
 }
